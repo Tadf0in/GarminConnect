@@ -17,3 +17,12 @@ Lancer le serveur :
 ```bash
 py backend\manage.py runserver
 ```
+
+backend/db.cnf :
+```cnf
+[client]
+database = NAME
+user = USER
+password = PASSWORD
+default-character-set = utf8mb4
+```
