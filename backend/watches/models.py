@@ -14,7 +14,7 @@ class User(AbstractUser):
     objects = UserManager()
 
     def __str__(self):
-        return self.email
+        return f"{self.last_name} {self.first_name} ({self.email})"
     
 
 class Profile(models.Model):
