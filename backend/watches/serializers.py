@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from .models import User, Profile, ActivityType, Activity, MeasureType, Measure, PassiveMeasure
+from .models import *
 
 class UserSerializer(serializers.ModelSerializer):
     class Meta:

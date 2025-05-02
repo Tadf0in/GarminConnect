@@ -1,75 +1,53 @@
-from rest_framework import generics
-from .models import User, Profile, ActivityType, Activity, MeasureType, Measure, PassiveMeasure
-from .serializers import (
-    UserSerializer, ProfileSerializer, ActivityTypeSerializer, ActivitySerializer,
-    MeasureTypeSerializer, MeasureSerializer, PassiveMeasureSerializer
-)
+from rest_framework.viewsets import ModelViewSet
 
-# --- USER ---
-class UserListCreateView(generics.ListCreateAPIView):
-    queryset = User.objects.all()
+from .models import *
+from .serializers import *
+
+
+class UserViewSet(ModelViewSet):
     serializer_class = UserSerializer
 
-class UserDetailView(generics.RetrieveAPIView):
-    queryset = User.objects.all()
-    serializer_class = UserSerializer
+    def get_queryset(self):
+        return User.objects.all()
 
 
-# --- PROFILE ---
-class ProfileListCreateView(generics.ListCreateAPIView):
-    queryset = Profile.objects.all()
+class ProfileViewSet(ModelViewSet):
     serializer_class = ProfileSerializer
 
-class ProfileDetailView(generics.RetrieveAPIView):
-    queryset = Profile.objects.all()
-    serializer_class = ProfileSerializer
+    def get_queryset(self):
+        return Profile.objects.all()
 
 
-# --- ACTIVITY TYPE ---
-class ActivityTypeListCreateView(generics.ListCreateAPIView):
-    queryset = ActivityType.objects.all()
+class ActivityTypeViewSet(ModelViewSet):
     serializer_class = ActivityTypeSerializer
 
-class ActivityTypeDetailView(generics.RetrieveAPIView):
-    queryset = ActivityType.objects.all()
-    serializer_class = ActivityTypeSerializer
+    def get_queryset(self):
+        return ActivityType.objects.all()
 
 
-# --- ACTIVITY ---
-class ActivityListCreateView(generics.ListCreateAPIView):
-    queryset = Activity.objects.all()
+class ActivityViewSet(ModelViewSet):
     serializer_class = ActivitySerializer
 
-class ActivityDetailView(generics.RetrieveAPIView):
-    queryset = Activity.objects.all()
-    serializer_class = ActivitySerializer
+    def get_queryset(self):
+        return Activity.objects.all()
 
 
-# --- MEASURE TYPE ---
-class MeasureTypeListCreateView(generics.ListCreateAPIView):
-    queryset = MeasureType.objects.all()
+class MeasureTypeViewSet(ModelViewSet):
     serializer_class = MeasureTypeSerializer
 
-class MeasureTypeDetailView(generics.RetrieveAPIView):
-    queryset = MeasureType.objects.all()
-    serializer_class = MeasureTypeSerializer
+    def get_queryset(self):
+        return MeasureType.objects.all()
 
 
-# --- MEASURE ---
-class MeasureListCreateView(generics.ListCreateAPIView):
-    queryset = Measure.objects.all()
+class MeasureViewSet(ModelViewSet):
     serializer_class = MeasureSerializer
 
-class MeasureDetailView(generics.RetrieveAPIView):
-    queryset = Measure.objects.all()
-    serializer_class = MeasureSerializer
+    def get_queryset(self):
+        return Measure.objects.all()
 
 
-# --- PASSIVE MEASURE ---
-class PassiveMeasureListCreateView(generics.ListCreateAPIView):
-    queryset = PassiveMeasure.objects.all()
+class PassiveMeasureViewSet(ModelViewSet):
     serializer_class = PassiveMeasureSerializer
 
-class PassiveMeasureDetailView(generics.RetrieveAPIView):
-    queryset = PassiveMeasure.objects.all()
-    serializer_class = PassiveMeasureSerializer
+    def get_queryset(self):
+        return PassiveMeasure.objects.all()
