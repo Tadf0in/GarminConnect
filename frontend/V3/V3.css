@@ -1,0 +1,237 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
+@import url('https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css');
+
+body {
+    font-family: 'Inter', system-ui, -apple-system, sans-serif;
+    background: linear-gradient(135deg, #f0f4f8 0%, #e6eef7 100%);
+    color: #1a202c;
+}
+
+/* Enhanced Card Styling */
+.card {
+    @apply bg-white rounded-2xl shadow-lg overflow-hidden;
+    background: linear-gradient(165deg, #ffffff, #f8fafc);
+    border: 1px solid rgba(226, 232, 240, 0.8);
+    box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.05), 0 4px 6px -2px rgba(0, 0, 0, 0.03);
+    transform: translateY(0);
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.card:hover {
+    box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+    transform: translateY(-4px);
+}
+
+.card-body {
+    @apply p-6;
+}
+
+/* Progress Bars */
+.progress-bar {
+    @apply w-full bg-gray-100 rounded-full h-3;
+    box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.05);
+}
+
+.progress-fill {
+    @apply h-full rounded-full;
+    transition: width 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+/* Sidebar Icons */
+.sidebar-icon {
+    @apply p-3 rounded-xl text-gray-500 hover:text-blue-600 hover:bg-blue-50 transition-all;
+    transition: transform 0.15s ease, background-color 0.15s ease, color 0.15s ease;
+}
+
+.sidebar-icon:hover {
+    transform: translateY(-2px);
+}
+
+.sidebar-icon.active {
+    @apply text-blue-600 bg-blue-50 font-medium;
+    box-shadow: 0 0 0 1px rgba(59, 130, 246, 0.1);
+}
+
+.sidebar-icon::after {
+    content: attr(title);
+    @apply absolute left-full ml-2 px-2 py-1 text-xs text-white bg-gray-800 rounded opacity-0;
+    top: 50%;
+    transform: translateY(-50%);
+    pointer-events: none;
+    transition: opacity 0.15s ease;
+    white-space: nowrap;
+    z-index: 30;
+}
+
+.sidebar-icon:hover::after {
+    opacity: 0.95;
+}
+
+/* Gradient Text */
+.gradient-text {
+    background: linear-gradient(90deg, #3b82f6, #6366f1);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    text-shadow: 0 0 1px rgba(59, 130, 246, 0.05);
+    font-weight: 700;
+}
+
+/* Better notification dots */
+.notification-dot {
+    @apply absolute bottom-0 right-0 w-3 h-3 bg-green-500 rounded-full border-2 border-white;
+    box-shadow: 0 0 0 2px rgba(255, 255, 255, 0.8);
+}
+
+/* Enhanced chart containers */
+.chart-container {
+    @apply rounded-xl p-4 bg-white bg-opacity-70;
+    backdrop-filter: blur(8px);
+}
+
+/* Status indicators */
+.status-badge {
+    @apply px-3 py-1 rounded-full text-sm font-medium;
+    transition: background-color 0.2s ease, color 0.2s ease;
+}
+
+.status-badge.good {
+    @apply bg-green-100 text-green-800;
+}
+
+.status-badge.warning {
+    @apply bg-yellow-100 text-yellow-800;
+}
+
+.status-badge.critical {
+    @apply bg-red-100 text-red-800;
+}
+
+/* Enhanced header */
+.dashboard-header {
+    backdrop-filter: blur(8px);
+    background-color: rgba(255, 255, 255, 0.9);
+    border-bottom: 1px solid rgba(226, 232, 240, 0.85);
+}
+
+/* Better footer */
+.dashboard-footer {
+    backdrop-filter: blur(5px);
+    background-color: rgba(255, 255, 255, 0.8);
+    border-top: 1px solid rgba(226, 232, 240, 0.7);
+}
+
+/* Better stat blocks */
+.stat-block {
+    @apply bg-white rounded-xl p-4 shadow-sm border border-gray-100;
+}
+
+/* Better avatar */
+.user-avatar {
+    @apply h-10 w-10 rounded-full text-white flex items-center justify-center font-medium shadow-md;
+    background: linear-gradient(135deg, #3b82f6, #4f46e5);
+    border: 2px solid white;
+}
+
+/* Logo appearance */
+.logo-appear {
+    animation: logo-appear 0.5s ease forwards;
+}
+
+@keyframes logo-appear {
+    0% {
+        transform: scale(0.5);
+        opacity: 0;
+    }
+    100% {
+        transform: scale(1);
+        opacity: 1;
+    }
+}
+
+/* Text appear animation */
+.text-appear {
+    animation: text-appear 0.5s ease forwards;
+}
+
+@keyframes text-appear {
+    0% {
+        transform: translateX(-15px);
+        opacity: 0;
+    }
+    100% {
+        transform: translateX(0);
+        opacity: 1;
+    }
+}
+
+/* Card appear animation */
+.card-appear {
+    animation: card-appear 0.5s ease forwards;
+}
+
+.card-appear:nth-child(1) { animation-delay: 0.05s; }
+.card-appear:nth-child(2) { animation-delay: 0.1s; }
+.card-appear:nth-child(3) { animation-delay: 0.15s; }
+.card-appear:nth-child(4) { animation-delay: 0.2s; }
+.card-appear:nth-child(5) { animation-delay: 0.25s; }
+
+@keyframes card-appear {
+    0% {
+        opacity: 0;
+        transform: translateY(15px);
+    }
+    100% {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* Chart appear */
+.chart-appear {
+    animation: chart-appear 0.6s ease forwards;
+}
+
+@keyframes chart-appear {
+    0% {
+        opacity: 0;
+        transform: scale(0.92);
+    }
+    100% {
+        opacity: 1;
+        transform: scale(1);
+    }
+}
+
+/* Improved activity bars */
+.activity-bar {
+    @apply rounded-t-sm transition-all;
+    animation: activity-bar-appear 0.6s ease forwards;
+}
+
+@keyframes activity-bar-appear {
+    0% {
+        height: 0;
+    }
+    100% {
+        height: var(--height);
+    }
+}
+
+/* Progress indicator */
+.progress-circle {
+    animation: progress-circle-appear 0.8s ease forwards;
+}
+
+@keyframes progress-circle-appear {
+    0% {
+        stroke-dashoffset: 339.3;
+    }
+    100% {
+        stroke-dashoffset: var(--dash-value);
+    }
+}
+
+/* Smoother scrolling */
+.smooth-scroll {
+    scroll-behavior: smooth;
+}

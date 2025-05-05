@@ -1,0 +1,617 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FitTrack - Garmin Dashboard</title>
+    <link href="https://cdn.jsdelivr.net/npm/lucide@latest/dist/umd/lucide.min.js" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link href="V3.css" rel="stylesheet">
+    <link rel="icon" href="https://cdn-icons-png.flaticon.com/512/1008/1008999.png" type="image/png">
+</head>
+<body class="bg-gradient-to-b from-blue-50 to-gray-100 min-h-screen flex flex-col font-sans">
+    <div class="flex h-screen overflow-hidden">
+        <!-- Sidebar -->
+        <div class="hidden lg:flex flex-col w-20 bg-white border-r border-gray-200 py-6 items-center shadow-lg">
+            <img src="https://cdn-icons-png.flaticon.com/512/1008/1008999.png" alt="FitTrack Logo" class="w-12 h-12 mb-8 logo-spin">
+            
+            <div class="flex flex-col space-y-4 items-center flex-1">
+                <a href="#" class="sidebar-icon active" title="Dashboard">
+                    <i data-lucide="layout-dashboard" style="width: 22px; height: 22px;"></i>
+                </a>
+                <a href="#" class="sidebar-icon" title="Heart Rate">
+                    <i data-lucide="heart" style="width: 22px; height: 22px;"></i>
+                </a>
+                <a href="#" class="sidebar-icon" title="Activities">
+                    <i data-lucide="activity" style="width: 22px; height: 22px;"></i>
+                </a>
+                <a href="#" class="sidebar-icon" title="Timer">
+                    <i data-lucide="timer" style="width: 22px; height: 22px;"></i>
+                </a>
+                <a href="#" class="sidebar-icon" title="Calendar">
+                    <i data-lucide="calendar" style="width: 22px; height: 22px;"></i>
+                </a>
+                <a href="#" class="sidebar-icon" title="Workouts">
+                    <i data-lucide="dumbbell" style="width: 22px; height: 22px;"></i>
+                </a>
+                <a href="#" class="sidebar-icon" title="Nutrition">
+                    <i data-lucide="utensils" style="width: 22px; height: 22px;"></i>
+                </a>
+                <a href="#" class="sidebar-icon" title="Hydration">
+                    <i data-lucide="droplets" style="width: 22px; height: 22px;"></i>
+                </a>
+            </div>
+            
+            <div class="mt-auto">
+                <a href="#" class="sidebar-icon" title="Settings">
+                    <i data-lucide="settings" style="width: 22px; height: 22px;"></i>
+                </a>
+            </div>
+        </div>
+
+        <!-- Main Content -->
+        <div class="flex-1 overflow-y-auto flex flex-col smooth-scroll">
+            <!-- Header -->
+            <header class="bg-white shadow-md sticky top-0 z-10 border-b border-gray-200">
+                <div class="px-6 py-4 flex justify-between items-center">
+                    <div class="flex items-center">
+                        <h1 class="text-2xl font-bold gradient-text mr-6 animate-text">FitTrack</h1>
+                        
+                        <nav class="hidden md:flex space-x-6">
+                            <a href="#" class="flex items-center py-1 px-1 border-b-2 border-blue-600 text-blue-600 font-medium text-sm hover:scale-105 transition-transform">
+                                <i data-lucide="layout-dashboard" class="mr-2" style="width: 16px; height: 16px;"></i>
+                                Dashboard
+                            </a>
+                            <a href="#" class="flex items-center py-1 px-1 border-b-2 border-transparent text-gray-600 hover:text-blue-600 hover:border-blue-300 font-medium text-sm hover:scale-105 transition-transform">
+                                <i data-lucide="activity" class="mr-2" style="width: 16px; height: 16px;"></i>
+                                Activities
+                            </a>
+                            <a href="#" class="flex items-center py-1 px-1 border-b-2 border-transparent text-gray-600 hover:text-blue-600 hover:border-blue-300 font-medium text-sm hover:scale-105 transition-transform">
+                                <i data-lucide="trending-up" class="mr-2" style="width: 16px; height: 16px;"></i>
+                                Health Stats
+                            </a>
+                        </nav>
+                    </div>
+                    
+                    <div class="flex items-center space-x-5">
+                        <div class="flex items-center text-xs text-gray-600 bg-gray-100 rounded-full px-3 py-1.5 animate-pulse">
+                            <div class="w-2 h-2 bg-green-500 rounded-full mr-2"></div>
+                            <span>Last synced: Today at 7:54 AM</span>
+                        </div>
+                        <div class="bg-blue-100 text-blue-700 px-3 py-1.5 rounded-full text-xs font-medium flex items-center">
+                            <i data-lucide="watch" class="mr-1.5" style="width: 14px; height: 14px;"></i>
+                            vívosmart 5
+                        </div>
+                        <div class="relative">
+                            <div class="h-10 w-10 rounded-full bg-gradient-to-r from-blue-600 to-indigo-600 text-white flex items-center justify-center font-medium shadow-lg hover:scale-110 transition-transform">
+                                M
+                            </div>
+                            <div class="absolute bottom-0 right-0 w-3 h-3 bg-green-500 rounded-full border-2 border-white animate-ping"></div>
+                        </div>
+                    </div>
+                </div>
+            </header>
+
+            <!-- Main Dashboard Content -->
+            <main class="flex-1 p-6">
+                <!-- Summary Row -->
+                <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 mb-6">
+                    <div class="card bg-gradient-to-br from-blue-600 to-indigo-700 text-white animate-card">
+                        <div class="card-body flex items-center">
+                            <div class="bg-white/20 rounded-xl p-3 mr-4">
+                                <i data-lucide="activity" style="width: 24px; height: 24px;"></i>
+                            </div>
+                            <div>
+                                <div class="text-sm font-medium text-blue-100">Steps Today</div>
+                                <div class="text-2xl font-bold">557</div>
+                                <div class="text-xs text-blue-100 mt-1">Goal: 10,000</div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="card animate-card">
+                        <div class="card-body flex items-center">
+                            <div class="bg-red-100 text-red-600 rounded-xl p-3 mr-4">
+                                <i data-lucide="heart" style="width: 24px; height: 24px;"></i>
+                            </div>
+                            <div>
+                                <div class="text-sm font-medium text-gray-600">Heart Rate</div>
+                                <div class="text-2xl font-bold text-gray-900">42 <span class="text-sm text-gray-600">bpm</span></div>
+                                <div class="text-xs text-gray-600 mt-1">Resting: 44 bpm</div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="card animate-card">
+                        <div class="card-body flex items-center">
+                            <div class="bg-green-100 text-green-600 rounded-xl p-3 mr-4">
+                                <i data-lucide="battery-full" style="width: 24px; height: 24px;"></i>
+                            </div>
+                            <div>
+                                <div class="text-sm font-medium text-gray-600">Body Battery</div>
+                                <div class="text-2xl font-bold text-gray-900">96<span class="text-sm text-gray-600">%</span></div>
+                                <div class="text-xs text-gray-600 mt-1">+70 charged | -4 drained</div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="card animate-card">
+                        <div class="card-body flex items-center">
+                            <div class="bg-orange-100 text-orange-600 rounded-xl p-3 mr-4">
+                                <i data-lucide="flame" style="width: 24px; height: 24px;"></i>
+                            </div>
+                            <div>
+                                <div class="text-sm font-medium text-gray-600">Calories</div>
+                                <div class="text-2xl font-bold text-gray-900">686</div>
+                                <div class="text-xs text-gray-600 mt-1">Active: 9 | Resting: 677</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Main Cards -->
+                <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+                    <!-- First Column -->
+                    <div class="space-y-6">
+                        <!-- Sleep Card -->
+                        <div class="card animate-card">
+                            <div class="card-body">
+                                <div class="flex justify-between items-center mb-5">
+                                    <div class="flex items-center">
+                                        <div class="bg-indigo-100 text-indigo-600 rounded-xl p-2 mr-3">
+                                            <i data-lucide="moon" style="width: 20px; height: 20px;"></i>
+                                        </div>
+                                        <h2 class="text-lg font-medium text-gray-900">Sleep</h2>
+                                    </div>
+                                    <span class="px-3 py-1 rounded-full text-sm font-medium bg-green-100 text-green-800">
+                                        Good
+                                    </span>
+                                </div>
+                                
+                                <div class="flex justify-between mb-3">
+                                    <div>
+                                        <div class="text-4xl font-bold text-gray-900">82</div>
+                                        <div class="text-sm text-gray-600">Sleep Score</div>
+                                    </div>
+                                    <div class="text-right">
+                                        <div class="text-2xl font-semibold text-gray-900">6h 51m</div>
+                                        <div class="text-sm text-gray-600">11:49 PM - 7:00 AM</div>
+                                    </div>
+                                </div>
+                                
+                                <div class="progress-bar">
+                                    <div class="progress-fill bg-gradient-to-r from-indigo-500 to-indigo-700 animate-progress" style="width: 0;" data-width="82%"></div>
+                                </div>
+                                
+                                <div class="mt-5 pt-5 border-t border-gray-200">
+                                    <div class="grid grid-cols-4 gap-2 text-center">
+                                        <div>
+                                            <div class="text-xs text-gray-600">Deep</div>
+                                            <div class="text-sm font-medium text-gray-900 mt-1">1h 12m</div>
+                                        </div>
+                                        <div>
+                                            <div class="text-xs text-gray-600">Light</div>
+                                            <div class="text-sm font-medium text-gray-900 mt-1">4h 28m</div>
+                                        </div>
+                                        <div>
+                                            <div class="text-xs text-gray-600">REM</div>
+                                            <div class="text-sm font-medium text-gray-900 mt-1">1h 11m</div>
+                                        </div>
+                                        <div>
+                                            <div class="text-xs text-gray-600">Awake</div>
+                                            <div class="text-sm font-medium text-gray-900 mt-1">0h 0m</div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <!-- Heart Rate Card -->
+                        <div class="card animate-card">
+                            <div class="card-body">
+                                <div class="flex items-center justify-between mb-5">
+                                    <div class="flex items-center">
+                                        <div class="bg-red-100 text-red-600 rounded-xl p-2 mr-3">
+                                            <i data-lucide="heart-pulse" style="width: 20px; height: 20px;"></i>
+                                        </div>
+                                        <h2 class="text-lg font-medium text-gray-900">Heart Rate</h2>
+                                    </div>
+                                    <a href="#" class="text-sm text-blue-600 hover:text-blue-800">View Details</a>
+                                </div>
+                                
+                                <div class="flex justify-between items-end mb-5">
+                                    <div>
+                                        <div class="text-4xl font-bold text-gray-900">42 <span class="text-lg font-normal text-gray-600">bpm</span></div>
+                                        <div class="text-sm text-gray-600">Current</div>
+                                    </div>
+                                    <div class="text-right">
+                                        <div class="text-2xl font-semibold text-gray-900">44 <span class="text-sm font-normal text-gray-600">bpm</span></div>
+                                        <div class="text-sm text-gray-600">Resting (7d avg)</div>
+                                    </div>
+                                </div>
+                                
+                                <div class="relative">
+                                    <canvas id="heartRateChart" height="140" class="animate-chart"></canvas>
+                                </div>
+                                
+                                <div class="mt-4 pt-4 border-t border-gray-200 grid grid-cols-3 gap-2 text-center">
+                                    <div>
+                                        <div class="text-xs text-gray-600">Min</div>
+                                        <div class="text-sm font-medium text-gray-900 mt-1">38 bpm</div>
+                                    </div>
+                                    <div>
+                                        <div class="text-xs text-gray-600">Average</div>
+                                        <div class="text-sm font-medium text-gray-900 mt-1">42 bpm</div>
+                                    </div>
+                                    <div>
+                                        <div class="text-xs text-gray-600">Max</div>
+                                        <div class="text-sm font-medium text-gray-900 mt-1">78 bpm</div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Second Column -->
+                    <div class="space-y-6">
+                        <!-- Steps Card -->
+                        <div class="card animate-card">
+                            <div class="card-body">
+                                <div class="flex items-center justify-between mb-5">
+                                    <div class="flex items-center">
+                                        <div class="bg-emerald-100 text-emerald-600 rounded-xl p-2 mr-3">
+                                            <i data-lucide="footprints" style="width: 20px; height: 20px;"></i>
+                                        </div>
+                                        <h2 class="text-lg font-medium text-gray-900">Steps</h2>
+                                    </div>
+                                    <a href="#" class="text-sm text-blue-600 hover:text-blue-800">Weekly Stats</a>
+                                </div>
+                                
+                                <div class="flex justify-between items-end mb-4">
+                                    <div>
+                                        <div class="text-4xl font-bold text-gray-900">557</div>
+                                        <div class="text-sm text-gray-600">Today</div>
+                                    </div>
+                                    <div class="text-right">
+                                        <div class="text-2xl font-semibold text-gray-900">11,610</div>
+                                        <div class="text-sm text-gray-600">Weekly Total</div>
+                                    </div>
+                                </div>
+                                
+                                <div class="progress-bar">
+                                    <div class="progress-fill bg-gradient-to-r from-emerald-500 to-emerald-700 animate-progress" style="width: 0;" data-width="5.6%"></div>
+                                </div>
+                                
+                                <div class="mt-3 flex justify-between text-xs text-gray-600">
+                                    <span>0</span>
+                                    <span>5,000</span>
+                                    <span>10,000</span>
+                                </div>
+                                
+                                <div class="mt-6 pt-5 border-t border-gray-200">
+                                    <div class="grid grid-cols-7 gap-1">
+                                        <div class="text-center">
+                                            <div class="text-xs text-gray-600">Mon</div>
+                                            <div class="h-24 bg-gray-100 rounded mt-2 flex flex-col justify-end overflow-hidden">
+                                                <div class="w-full bg-emerald-200 rounded-b animate-bar" style="height: 35%"></div>
+                                            </div>
+                                            <div class="text-xs font-medium mt-1">3,520</div>
+                                        </div>
+                                        <div class="text-center">
+                                            <div class="text-xs text-gray-600">Tue</div>
+                                            <div class="h-24 bg-gray-100 rounded mt-2 flex flex-col justify-end overflow-hidden">
+                                                <div class="w-full bg-emerald-200 rounded-b animate-bar" style="height: 45%"></div>
+                                            </div>
+                                            <div class="text-xs font-medium mt-1">4,503</div>
+                                        </div>
+                                        <div class="text-center">
+                                            <div class="text-xs text-gray-600">Wed</div>
+                                            <div class="h-24 bg-gray-100 rounded mt-2 flex flex-col justify-end overflow-hidden">
+                                                <div class="w-full bg-emerald-200 rounded-b animate-bar" style="height: 28%"></div>
+                                            </div>
+                                            <div class="text-xs font-medium mt-1">2,800</div>
+                                        </div>
+                                        <div class="text-center">
+                                            <div class="text-xs text-gray-600">Thu</div>
+                                            <div class="h-24 bg-gray-100 rounded mt-2 flex flex-col justify-end overflow-hidden">
+                                                <div class="w-full bg-emerald-200 rounded-b animate-bar" style="height: 39%"></div>
+                                            </div>
+                                            <div class="text-xs font-medium mt-1">3,890</div>
+                                        </div>
+                                        <div class="text-center">
+                                            <div class="text-xs text-gray-600">Fri</div>
+                                            <div class="h-24 bg-gray-100 rounded mt-2 flex flex-col justify-end overflow-hidden">
+                                                <div class="w-full bg-emerald-600 rounded-b animate-bar" style="height: 87%"></div>
+                                            </div>
+                                            <div class="text-xs font-medium mt-1">8,720</div>
+                                        </div>
+                                        <div class="text-center">
+                                            <div class="text-xs text-gray-600">Sat</div>
+                                            <div class="h-24 bg-gray-100 rounded mt-2 flex flex-col justify-end overflow-hidden">
+                                                <div class="w-full bg-emerald-200 rounded-b animate-bar" style="height: 65%"></div>
+                                            </div>
+                                            <div class="text-xs font-medium mt-1">6,450</div>
+                                        </div>
+                                        <div class="text-center">
+                                            <div class="text-xs text-gray-600">Sun</div>
+                                            <div class="h-24 bg-gray-100 rounded mt-2 flex flex-col justify-end overflow-hidden">
+                                                <div class="w-full bg-emerald-200 rounded-b animate-bar" style="height: 5%"></div>
+                                            </div>
+                                            <div class="text-xs font-medium mt-1">557</div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <!-- Calories Card -->
+                        <div class="card animate-card">
+                            <div class="card-body">
+                                <div class="flex items-center justify-between mb-5">
+                                    <div class="flex items-center">
+                                        <div class="bg-orange-100 text-orange-600 rounded-xl p-2 mr-3">
+                                            <i data-lucide="flame" style="width: 20px; height: 20px;"></i>
+                                        </div>
+                                        <h2 class="text-lg font-medium text-gray-900">Calories</h2>
+                                    </div>
+                                    <a href="#" class="text-sm text-blue-600 hover:text-blue-800">History</a>
+                                </div>
+                                
+                                <div class="flex justify-between items-end mb-4">
+                                    <div>
+                                        <div class="text-4xl font-bold text-gray-900">686</div>
+                                        <div class="text-sm text-gray-600">Total</div>
+                                    </div>
+                                    <div class="flex space-x-6">
+                                        <div>
+                                            <div class="text-2xl font-semibold text-gray-900">9</div>
+                                            <div class="text-sm text-gray-600">Active</div>
+                                        </div>
+                                        <div>
+                                            <div class="text-2xl font-semibold text-gray-900">677</div>
+                                            <div class="text-sm text-gray-600">Resting</div>
+                                        </div>
+                                    </div>
+                                </div>
+                                
+                                <div class="mt-4 h-12 flex rounded-xl overflow-hidden">
+                                    <div class="bg-orange-500 h-full animate-progress" style="width: 0;" data-width="1.3%"></div>
+                                    <div class="bg-orange-200 h-full flex-1"></div>
+                                </div>
+                                
+                                <div class="mt-2 flex justify-between text-xs">
+                                    <span class="text-orange-600 font-medium">Active: 1.3%</span>
+                                    <span class="text-orange-500 font-medium">Resting: 98.7%</span>
+                                </div>
+                                
+                                <div class="mt-6 pt-5 border-t border-gray-200">
+                                    <h3 class="text-sm font-medium text-gray-900 mb-3">Calorie Breakdown</h3>
+                                    <canvas id="caloriesChart" height="180" class="animate-chart"></canvas>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Third Column -->
+                    <div class="space-y-6">
+                        <!-- Body Battery Card -->
+                        <div class="card animate-card">
+                            <div class="card-body">
+                                <div class="flex items-center justify-between mb-5">
+                                    <div class="flex items-center">
+                                        <div class="bg-blue-100 text-blue-600 rounded-xl p-2 mr-3">
+                                            <i data-lucide="battery-charging" style="width: 20px; height: 20px;"></i>
+                                        </div>
+                                        <h2 class="text-lg font-medium text-gray-900">Body Battery</h2>
+                                    </div>
+                                    <a href="#" class="text-sm text-blue-600 hover:text-blue-800">Details</a>
+                                </div>
+                                
+                                <div class="flex flex-col items-center mb-4">
+                                    <div class="relative w-40 h-40 mb-5">
+                                        <div class="w-full h-full rounded-full border-8 border-gray-100 flex items-center justify-center animate-spin-slow">
+                                            <div class="text-center">
+                                                <div class="text-5xl font-bold text-gray-900">96</div>
+                                                <div class="text-sm text-gray-600">Current</div>
+                                            </div>
+                                        </div>
+                                        <svg class="absolute top-0 left-0 w-40 h-40 -rotate-90" viewBox="0 0 120 120">
+                                            <circle cx="60" cy="60" r="54" fill="none" stroke="#f0f0f0" stroke-width="12" />
+                                            <circle cx="60" cy="60" r="54" fill="none" stroke="url(#blue-gradient)" stroke-width="12" 
+                                                stroke-dasharray="339.3" stroke-dashoffset="13.6" class="animate-progress-circle" />
+                                        </svg>
+                                        <defs>
+                                            <linearGradient id="blue-gradient" x1="0%" y1="0%" x2="100%" y2="0%">
+                                                <stop offset="0%" stop-color="#3b82f6" />
+                                                <stop offset="100%" stop-color="#60a5fa" />
+                                            </linearGradient>
+                                        </defs>
+                                    </div>
+                                    
+                                    <div class="grid grid-cols-2 gap-8 w-full">
+                                        <div class="flex items-center">
+                                            <div class="w-3 h-3 bg-green-500 rounded-full mr-2 animate-pulse"></div>
+                                            <div>
+                                                <div class="text-sm text-gray-600">Charged</div>
+                                                <div class="text-xl font-semibold text-gray-900">+70</div>
+                                            </div>
+                                        </div>
+                                        <div class="flex items-center">
+                                            <div class="w-3 h-3 bg-red-500 rounded-full mr-2 animate-pulse"></div>
+                                            <div>
+                                                <div class="text-sm text-gray-600">Drained</div>
+                                                <div class="text-xl font-semibold text-gray-900">-4</div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                
+                                <div class="mt-5 pt-5 border-t border-gray-200">
+                                    <canvas id="batteryChart" height="120" class="animate-chart"></canvas>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <!-- Intensity Minutes Card -->
+                        <div class="card animate-card">
+                            <div class="card-body">
+                                <div class="flex items-center justify-between mb-5">
+                                    <div class="flex items-center">
+                                        <div class="bg-purple-100 text-purple-600 rounded-xl p-2 mr-3">
+                                            <i data-lucide="zap" style="width: 20px; height: 20px;"></i>
+                                        </div>
+                                        <h2 class="text-lg font-medium text-gray-900">Intensity Minutes</h2>
+                                    </div>
+                                    <a href="#" class="text-sm text-blue-600 hover:text-blue-800">View All</a>
+                                </div>
+                                
+                                <div class="flex justify-between items-end mb-4">
+                                    <div>
+                                        <div class="text-4xl font-bold text-gray-900">75</div>
+                                        <div class="text-sm text-gray-600">This Week</div>
+                                    </div>
+                                    <div class="text-right">
+                                        <div class="text-2xl font-semibold text-gray-900">150</div>
+                                        <div class="text-sm text-gray-600">Weekly Goal</div>
+                                    </div>
+                                </div>
+                                
+                                <div class="progress-bar">
+                                    <div class="progress-fill bg-gradient-to-r from-purple-500 to-purple-700 animate-progress" style="width: 0;" data-width="50%"></div>
+                                </div>
+                                
+                                <div class="mt-3 flex justify-between text-xs text-gray-600">
+                                    <span>0</span>
+                                    <span>75</span>
+                                    <span>150</span>
+                                </div>
+                                
+                                <div class="mt-6 pt-5 border-t border-gray-200">
+                                    <div class="grid grid-cols-7 gap-1">
+                                        <div class="text-center">
+                                            <div class="text-xs text-gray-600">M</div>
+                                            <div class="h-20 bg-gray-100 rounded mt-2 flex flex-col justify-end overflow-hidden">
+                                                <div class="w-full bg-purple-200 rounded-b animate-bar" style="height: 10%"></div>
+                                            </div>
+                                            <div class="text-xs font-medium mt-1">5</div>
+                                        </div>
+                                        <div class="text-center">
+                                            <div class="text-xs text-gray-600">T</div>
+                                            <div class="h-20 bg-gray-100 rounded mt-2 flex flex-col justify-end overflow-hidden">
+                                                <div class="w-full bg-purple-200 rounded-b animate-bar" style="height: 24%"></div>
+                                            </div>
+                                            <div class="text-xs font-medium mt-1">12</div>
+                                        </div>
+                                        <div class="text-center">
+                                            <div class="text-xs text-gray-600">W</div>
+                                            <div class="h-20 bg-gray-100 rounded mt-2 flex flex-col justify-end overflow-hidden">
+                                                <div class="w-full bg-purple-200 rounded-b animate-bar" style="height: 16%"></div>
+                                            </div>
+                                            <div class="text-xs font-medium mt-1">8</div>
+                                        </div>
+                                        <div class="text-center">
+                                            <div class="text-xs text-gray-600">T</div>
+                                            <div class="h-20 bg-gray-100 rounded mt-2 flex flex-col justify-end overflow-hidden">
+                                                <div class="w-full bg-purple-200 rounded-b animate-bar" style="height: 10%"></div>
+                                            </div>
+                                            <div class="text-xs font-medium mt-1">5</div>
+                                        </div>
+                                        <div class="text-center">
+                                            <div class="text-xs text-gray-600">F</div>
+                                            <div class="h-20 bg-gray-100 rounded mt-2 flex flex-col justify-end overflow-hidden">
+                                                <div class="w-full bg-purple-600 rounded-b animate-bar" style="height: 90%"></div>
+                                            </div>
+                                            <div class="text-xs font-medium mt-1">45</div>
+                                        </div>
+                                        <div class="text-center">
+                                            <div class="text-xs text-gray-600">S</div>
+                                            <div class="h-20 bg-gray-100 rounded mt-2 flex flex-col justify-end overflow-hidden">
+                                                <div class="w-full bg-purple-200 rounded-b animate-bar" style="height: 0%"></div>
+                                            </div>
+                                            <div class="text-xs font-medium mt-1">0</div>
+                                        </div>
+                                        <div class="text-center">
+                                            <div class="text-xs text-gray-600">S</div>
+                                            <div class="h-20 bg-gray-100 rounded mt-2 flex flex-col justify-end overflow-hidden">
+                                                <div class="w-full bg-purple-200 rounded-b animate-bar" style="height: 0%"></div>
+                                            </div>
+                                            <div class="text-xs font-medium mt-1">0</div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Footer Row: Quick Stats -->
+                <div class="grid grid-cols-1 sm:grid-cols-3 lg:grid-cols-5 gap-6 mt-6">
+                    <div class="card bg-white p-4 flex items-center animate-card">
+                        <div class="bg-blue-100 text-blue-600 rounded-lg p-2 mr-3">
+                            <i data-lucide="award" style="width: 20px; height: 20px;"></i>
+                        </div>
+                        <div>
+                            <div class="text-xs text-gray-600">Achievements</div>
+                            <div class="font-semibold text-gray-900">38 Badges</div>
+                        </div>
+                    </div>
+                    
+                    <div class="card bg-white p-4 flex items-center animate-card">
+                        <div class="bg-green-100 text-green-600 rounded-lg p-2 mr-3">
+                            <i data-lucide="trending-up" style="width: 20px; height: 20px;"></i>
+                        </div>
+                        <div>
+                            <div class="text-xs text-gray-600">Floors Climbed</div>
+                            <div class="font-semibold text-gray-900">8 Floors</div>
+                        </div>
+                    </div>
+                    
+                    <div class="card bg-white p-4 flex items-center animate-card">
+                        <div class="bg-red-100 text-red-600 rounded-lg p-2 mr-3">
+                            <i data-lucide="map-pin" style="width: 20px; height: 20px;"></i>
+                        </div>
+                        <div>
+                            <div class="text-xs text-gray-600">Distance</div>
+                            <div class="font-semibold text-gray-900">3.2 mi</div>
+                        </div>
+                    </div>
+                    
+                    <div class="card bg-white p-4 flex items-center animate-card">
+                        <div class="bg-amber-100 text-amber-600 rounded-lg p-2 mr-3">
+                            <i data-lucide="droplets" style="width: 20px; height: 20px;"></i>
+                        </div>
+                        <div>
+                            <div class="text-xs text-gray-600">Hydration</div>
+                            <div class="font-semibold text-gray-900">2/8 Cups</div>
+                        </div>
+                    </div>
+                    
+                    <div class="card bg-white p-4 flex items-center animate-card">
+                        <div class="bg-violet-100 text-violet-600 rounded-lg p-2 mr-3">
+                            <i data-lucide="calendar" style="width: 20px; height: 20px;"></i>
+                        </div>
+                        <div>
+                            <div class="text-xs text-gray-600">Next Event</div>
+                            <div class="font-semibold text-gray-900">Run 5K</div>
+                        </div>
+                    </div>
+                </div>
+            </main>
+            
+            <!-- Footer -->
+            <footer class="bg-white border-t border-gray-200 mt-auto shadow-md">
+                <div class="px-6 py-4 flex justify-between items-center">
+                    <div class="text-sm text-gray-600">© 2025 FitTrack. All rights reserved.</div>
+                    <div class="flex items-center space-x-6">
+                        <a href="#" class="text-sm text-gray-600 hover:text-blue-600 hover:scale-105 transition-transform">Privacy Policy</a>
+                        <a href="#" class="text-sm text-gray-600 hover:text-blue-600 hover:scale-105 transition-transform">Terms of Service</a>
+                        <a href="#" class="text-sm text-gray-600 hover:text-blue-600 hover:scale-105 transition-transform">Help Center</a>
+                    </div>
+                </div>
+            </footer>
+        </div>
+    </div>
+    
+    <script src="V3.js"></script>
+</body>
+</html>
