@@ -1,75 +1,64 @@
-from rest_framework import generics
-from .models import User, Profile, ActivityType, Activity, MeasureType, Measure, PassiveMeasure
-from .serializers import (
-    UserSerializer, ProfileSerializer, ActivityTypeSerializer, ActivitySerializer,
-    MeasureTypeSerializer, MeasureSerializer, PassiveMeasureSerializer
-)
+from rest_framework.viewsets import ModelViewSet
+from rest_framework.permissions import IsAuthenticated
+from .models import *
+from .serializers import *
+from .permissions import IsTeacherOrOwnObjectOrAdmin
 
-# --- USER ---
-class UserListCreateView(generics.ListCreateAPIView):
-    queryset = User.objects.all()
+class UserViewSet(ModelViewSet):
     serializer_class = UserSerializer
+    permission_classes = [IsAuthenticated, IsTeacherOrOwnObjectOrAdmin]
 
-class UserDetailView(generics.RetrieveAPIView):
-    queryset = User.objects.all()
-    serializer_class = UserSerializer
+    def get_queryset(self):
+        if self.request.user.is_superuser or self.request.user.groups.filter(name='Enseignant').exists():
+            return User.objects.all()
+        return User.objects.filter(id=self.request.user.id)
 
-
-# --- PROFILE ---
-class ProfileListCreateView(generics.ListCreateAPIView):
-    queryset = Profile.objects.all()
+class ProfileViewSet(ModelViewSet):
     serializer_class = ProfileSerializer
+    permission_classes = [IsAuthenticated, IsTeacherOrOwnObjectOrAdmin]
 
-class ProfileDetailView(generics.RetrieveAPIView):
-    queryset = Profile.objects.all()
-    serializer_class = ProfileSerializer
+    def get_queryset(self):
+        if self.request.user.is_superuser or self.request.user.groups.filter(name='Enseignant').exists():
+            return Profile.objects.all()
+        return Profile.objects.filter(user=self.request.user)
 
-
-# --- ACTIVITY TYPE ---
-class ActivityTypeListCreateView(generics.ListCreateAPIView):
-    queryset = ActivityType.objects.all()
+class ActivityTypeViewSet(ModelViewSet):
     serializer_class = ActivityTypeSerializer
+    permission_classes = [IsAuthenticated, IsTeacherOrOwnObjectOrAdmin]
 
-class ActivityTypeDetailView(generics.RetrieveAPIView):
-    queryset = ActivityType.objects.all()
-    serializer_class = ActivityTypeSerializer
+    def get_queryset(self):
+        return ActivityType.objects.all()
 
-
-# --- ACTIVITY ---
-class ActivityListCreateView(generics.ListCreateAPIView):
-    queryset = Activity.objects.all()
+class ActivityViewSet(ModelViewSet):
     serializer_class = ActivitySerializer
+    permission_classes = [IsAuthenticated, IsTeacherOrOwnObjectOrAdmin]
 
-class ActivityDetailView(generics.RetrieveAPIView):
-    queryset = Activity.objects.all()
-    serializer_class = ActivitySerializer
+    def get_queryset(self):
+        if self.request.user.is_superuser or self.request.user.groups.filter(name='Enseignant').exists():
+            return Activity.objects.all()
+        return Activity.objects.filter(user=self.request.user)
 
-
-# --- MEASURE TYPE ---
-class MeasureTypeListCreateView(generics.ListCreateAPIView):
-    queryset = MeasureType.objects.all()
+class MeasureTypeViewSet(ModelViewSet):
     serializer_class = MeasureTypeSerializer
+    permission_classes = [IsAuthenticated, IsTeacherOrOwnObjectOrAdmin]
 
-class MeasureTypeDetailView(generics.RetrieveAPIView):
-    queryset = MeasureType.objects.all()
-    serializer_class = MeasureTypeSerializer
+    def get_queryset(self):
+        return MeasureType.objects.all()
 
-
-# --- MEASURE ---
-class MeasureListCreateView(generics.ListCreateAPIView):
-    queryset = Measure.objects.all()
+class MeasureViewSet(ModelViewSet):
     serializer_class = MeasureSerializer
+    permission_classes = [IsAuthenticated, IsTeacherOrOwnObjectOrAdmin]
 
-class MeasureDetailView(generics.RetrieveAPIView):
-    queryset = Measure.objects.all()
-    serializer_class = MeasureSerializer
+    def get_queryset(self):
+        if self.request.user.is_superuser or self.request.user.groups.filter(name='Enseignant').exists():
+            return Measure.objects.all()
+        return Measure.objects.filter(activity__user=self.request.user)
 
-
-# --- PASSIVE MEASURE ---
-class PassiveMeasureListCreateView(generics.ListCreateAPIView):
-    queryset = PassiveMeasure.objects.all()
+class PassiveMeasureViewSet(ModelViewSet):
     serializer_class = PassiveMeasureSerializer
+    permission_classes = [IsAuthenticated, IsTeacherOrOwnObjectOrAdmin]
 
-class PassiveMeasureDetailView(generics.RetrieveAPIView):
-    queryset = PassiveMeasure.objects.all()
-    serializer_class = PassiveMeasureSerializer
+    def get_queryset(self):
+        if self.request.user.is_superuser or self.request.user.groups.filter(name='Enseignant').exists():
+            return PassiveMeasure.objects.all()
+        return PassiveMeasure.objects.filter(user=self.request.user)
