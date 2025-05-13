@@ -11,12 +11,12 @@ export default function PageError() {
       <header>
           <Navbar />
       </header>
-      <div id="error-page">
+      <div id="error-page" className="flex flex-col items-center justify-center min-h-screen text-center gap-4">
           <p>Désolé, une erreur inattendue est survenue.</p>
           <p>
             {error && <i>{error.status} {error.statusText || error.message}</i>}
           </p>
-          <Link to=''>Retour à l'accueil</Link>
+          <Link to='' className="text-blue-500 underline">Retour à l'accueil</Link>
       </div>
       <footer>
           <Footer />

@@ -6,6 +6,7 @@ import PageError from './errors/PageError';
 import Root from './components/Root/Root';
 
 import Home from './components/Home/Home';
+import Dashboard from './components/Dashboard/Dashboard';
 
 
 const router = createBrowserRouter([
@@ -18,6 +19,10 @@ const router = createBrowserRouter([
         path: '',
         element: <Home />,
       },
+      {
+        path: 'dashboard',
+        element: <Dashboard />
+      }
     ]
   }
 ], {
