@@ -30,10 +30,10 @@ class Profile(models.Model):
         ('Autre', 'Autre'),
     ])
     user = models.ForeignKey(User, on_delete=models.CASCADE)
-    code = models.CharField(max_length=200)
-    token = models.CharField(max_length=200)
-    client_id = models.CharField(max_length=200)
-    client_secret = models.CharField(max_length=200)
+    code = models.CharField(max_length=200, null=True, blank=True)
+    token = models.CharField(max_length=200, null=True, blank=True)
+    client_id = models.CharField(max_length=200, null=True, blank=True)
+    client_secret = models.CharField(max_length=200, null=True, blank=True)
 
 
 class ActivityType(models.Model):
