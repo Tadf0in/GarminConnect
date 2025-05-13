@@ -5,7 +5,11 @@ import { useEffect } from 'react';
 import { createIcons, icons } from 'lucide';
 // import logo from '../../assets/logo.png';
 
+import { dashboardData } from '../../data/dashboardData';
+
 export default function Navbar() {
+    let data = dashboardData;
+
     useEffect(() => {
         createIcons({ icons });
     }, [])
@@ -27,9 +31,9 @@ export default function Navbar() {
                 </div>
 
                 <div className="flex items-center space-x-5">
-                    <SyncStatus time="Today at 7:54 AM" />
-                    <DeviceStatus device="vívosmart 5" />
-                    <UserAvatar letter="M" />
+                    <SyncStatus time={data.lastSynced} />
+                    <DeviceStatus device={data.device} />
+                    <UserAvatar letter={data.name[0]}/>
                 </div>
             </div>
         </header>

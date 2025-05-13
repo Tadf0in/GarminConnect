@@ -16,5 +16,6 @@ export const dashboardData = {
   intensityMinutes: 75,
   intensityMinutesGoal: 150,
   lastSynced: "Today at 7:54 AM",
-  device: "vívosmart 5"
+  device: "vívosmart 5",
+  name: "Maxence"
 };
