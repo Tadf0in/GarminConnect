@@ -32,12 +32,6 @@ class ActivityTypeSerializer(serializers.ModelSerializer):
         fields = '__all__'
 
 
-class ActivitySerializer(serializers.ModelSerializer):
-    class Meta:
-        model = Activity
-        fields = '__all__'
-
-
 class MeasureTypeSerializer(serializers.ModelSerializer):
     class Meta:
         model = MeasureType
@@ -45,6 +39,8 @@ class MeasureTypeSerializer(serializers.ModelSerializer):
 
 
 class MeasureSerializer(serializers.ModelSerializer):
+    type = MeasureTypeSerializer()
+
     class Meta:
         model = Measure
         fields = '__all__'
@@ -54,3 +50,16 @@ class PassiveMeasureSerializer(serializers.ModelSerializer):
     class Meta:
         model = PassiveMeasure
         fields = '__all__'
+
+
+class ActivitySerializer(serializers.ModelSerializer):
+    type = ActivityTypeSerializer()
+    measures = serializers.SerializerMethodField()
+
+    class Meta:
+        model = Activity
+        fields = '__all__'
+
+    def get_measures(self, obj):
+        measures = Measure.objects.filter(activity=obj)
+        return MeasureSerializer(measures, many=True).data
