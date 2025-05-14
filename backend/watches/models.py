@@ -48,10 +48,13 @@ class Activity(models.Model):
     start = models.DateTimeField()
     duration = models.DurationField()
     type = models.ForeignKey(ActivityType, null=True, on_delete=models.SET_NULL)
-    location = models.CharField(max_length=200)
+    location = models.CharField(max_length=200, null=True, blank=True)
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     activity_manufacturer_id = models.IntegerField()
     manufacturer = models.CharField(max_length=200)
+    calories = models.PositiveSmallIntegerField()
+    maxHR = models.PositiveSmallIntegerField()
+    averageHR = models.PositiveSmallIntegerField()
 
 
 class MeasureType(models.Model):

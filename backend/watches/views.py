@@ -82,6 +82,11 @@ class PassiveMeasureViewSet(ModelViewSet):
 class RefreshProfileView(APIView):
     permission_classes = [IsAuthenticated]
 
+    def _add_mesure(type_name, unite, activity, data):
+        measure_type, _ = MeasureType.objects.get_or_create(name=type_name, unite=unite)
+        Measure.objects.create(activity=activity, type=measure_type, value=data)
+
+
     def post(self, request, id_profile):
         try:
             profile = Profile.objects.get(id=id_profile)
@@ -94,21 +99,55 @@ class RefreshProfileView(APIView):
 
                 start = profile.last_update
                 end = datetime.now()
-                activities = client.get_activities_by_date(startdate=start, enddate=end)
+                activities = client.get_activities_by_date(
+                    startdate=start.strftime('%Y-%m-%d'), 
+                    enddate=end.strftime('%Y-%m-%d')
+                )
 
-                for activity in activities:
-                    activity_type, created = ActivityType.objects.get_or_create(name=activity["activityType"]["typeKey"])
+                for activity_data in activities:
+                    # Si l'activité existe déjà on la skip (ca devrait pas arriver en prod mais pour je laisse pour tester)
+                    if Activity.objects.filter(activity_manufacturer_id=activity_data["activityId"]).exists():
+                        continue
 
+                    # Données générales de l'activité
+                    activity = Activity(
+                        name=activity_data["activityName"],
+                        start=activity_data["startTimeLocal"],
+                        duration=timedelta(seconds=activity_data["duration"]),
+                        location=activity_data.get("locationName", None),
+                        user=profile.user,
+                        activity_manufacturer_id=activity_data["activityId"],
+                        manufacturer="Garmin",
+                        calories=activity_data["calories"],
+                        maxHR=activity_data["maxHR"],
+                        averageHR=activity_data["maxHR"]
+                    )
+                    activity.type, _ = ActivityType.objects.get_or_create(name=activity_data["activityType"]["typeKey"])
+                    activity.save()
+  
+                    # Données spécifiques
+                    if activity.type.name == 'running':
+                        self._add_mesure("Distance", "km", activity, activity_data["distance"])
+                        self._add_mesure("Nombre de pas", "pas", activity, activity_data["steps"])
+                        self._add_mesure("Dénivelé positif", "m", activity, activity_data["elevationGain"])
+                        self._add_mesure("Dénivelé négatif", "m", activity, activity_data["elevationLoss"])
+                        self._add_mesure("Vitesse moyenne", "km/h", activity, activity_data["maxSpeed"])
+                        self._add_mesure("Vitesse max", "km/h", activity, activity_data["averageSpeed"])
+                        
+                    elif activity.type.name == 'strength_training':
+                        pass
 
             elif profile.brand == 'Withings':
                 # à l'autre groupe de faire
                 pass
             
-            # profile.last_update = datetime.now()
-            # profile.save()
+            profile.last_update = datetime.now()
+            profile.save()
 
             return Response({"detail": "Profile data refreshed successfully."}, status=status.HTTP_200_OK)
         except Profile.DoesNotExist:
             return Response({"detail": "Profile not found."}, status=status.HTTP_404_NOT_FOUND)
         except Exception as e:
+            import traceback
+            traceback.print_exc()
             return Response({"detail": str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
