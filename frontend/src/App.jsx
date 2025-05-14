@@ -7,6 +7,7 @@ import Root from './components/Root/Root';
 
 import Home from './components/Home/Home';
 import Dashboard from './components/Dashboard/Dashboard';
+import Activities from './components/Activities/Activities';
 
 
 const router = createBrowserRouter([
@@ -22,6 +23,10 @@ const router = createBrowserRouter([
       {
         path: 'dashboard',
         element: <Dashboard />
+      },
+      {
+        path: 'activities',
+        element: <Activities />
       }
     ]
   }

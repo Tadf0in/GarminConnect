@@ -1,3 +1,5 @@
+// Données rentrées à la main
+// En attendant d'être débanni de l'API Garmin
 export const dashboardData = {
   sleepScore: 82,
   sleepDuration: "6h 51m",
@@ -15,7 +17,7 @@ export const dashboardData = {
   restingCalories: 377,
   intensityMinutes: 75,
   intensityMinutesGoal: 150,
-  lastSynced: "Today at 7:54 AM",
+  lastSynced: new Date().toLocaleString(),
   device: "vívosmart 5",
   name: "Maxence"
 };

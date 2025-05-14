@@ -21,12 +21,12 @@ export default function Navbar() {
                     <div className="bg-blue-600 rounded-full w-8 h-8 flex items-center justify-center">
                         <i data-lucide="activity" className="text-white" style={{ width: '18px', height: '18px' }}></i>
                     </div>
-                    <a href="#" className="text-2xl font-bold gradient-text mr-6">&nbsp;FitTrack</a>
+                    <NavLink to="/" className="text-2xl font-bold gradient-text mr-6">&nbsp;FitTrack</NavLink>
 
                     <nav className="hidden md:flex space-x-6">
-                        <NavItem href="/dashboard" icon="layout-dashboard" label="Dashboard" active />
-                        <NavItem href="/activities" icon="activity" label="Activities" />
-                        <NavItem href="/health" icon="trending-up" label="Health Stats" />
+                        <NavItem href="/dashboard" icon="layout-dashboard" label="Dashboard" active={window.location.pathname === '/dashboard'}/>
+                        <NavItem href="/activities" icon="activity" label="Activities" active={window.location.pathname === '/activities'}/>
+                        <NavItem href="/health" icon="trending-up" label="Health Stats" active={window.location.pathname === '/health'}/>
                     </nav>
                 </div>
 
