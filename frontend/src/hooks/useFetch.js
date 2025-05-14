@@ -12,7 +12,8 @@ export default function useFetch (url, options) {
             ...options,
             headers: {
                 ...options.headers,
-                'Accept': 'application/json; charset=UTF-8'
+                'Accept': 'application/json; charset=UTF-8',
+                ...(localStorage.getItem('access_token') && { 'Authorization': `Bearer ${localStorage.getItem('access_token')}` })
             }
 
         }).then(res => res.json()).then(data => {

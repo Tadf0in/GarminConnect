@@ -14,29 +14,56 @@ export default function Navbar() {
         createIcons({ icons });
     }, [])
 
+    const isLoggedIn = localStorage.getItem('access_token');
+
     return (
-        <header className="bg-white shadow-sm sticky top-0 z-10 border-b border-gray-100">
-            <div className="px-6 py-4 flex justify-between items-center">
-                <div className="flex items-center">
-                    <div className="bg-blue-600 rounded-full w-8 h-8 flex items-center justify-center">
-                        <i data-lucide="activity" className="text-white" style={{ width: '18px', height: '18px' }}></i>
-                    </div>
-                    <NavLink to="/" className="text-2xl font-bold gradient-text mr-6">&nbsp;FitTrack</NavLink>
-
-                    <nav className="hidden md:flex space-x-6">
-                        <NavItem href="/dashboard" icon="layout-dashboard" label="Dashboard" active={window.location.pathname === '/dashboard'}/>
-                        <NavItem href="/activities" icon="activity" label="Activities" active={window.location.pathname === '/activities'}/>
-                        <NavItem href="/health" icon="trending-up" label="Health Stats" active={window.location.pathname === '/health'}/>
-                    </nav>
-                </div>
-
-                <div className="flex items-center space-x-5">
-                    <SyncStatus time={data.lastSynced} />
-                    <DeviceStatus device={data.device} />
-                    <UserAvatar letter={data.name[0]}/>
-                </div>
+      <header className="bg-white shadow-sm sticky top-0 z-10 border-b border-gray-100">
+        <div className="px-6 py-4 flex justify-between items-center">
+          <div className="flex items-center">
+            <div className="bg-blue-600 rounded-full w-8 h-8 flex items-center justify-center">
+              <i data-lucide="activity" className="text-white" style={{ width: '18px', height: '18px' }}></i>
             </div>
-        </header>
+            <NavLink to="/" className="text-2xl font-bold gradient-text mr-6">&nbsp;FitTrack</NavLink>
+
+            
+            {isLoggedIn && (
+              // On affiche le menu que si on est connecté
+              <nav className="hidden md:flex space-x-6">
+                <NavItem href="/dashboard" icon="layout-dashboard" label="Dashboard" active={window.location.pathname === '/dashboard'}/>
+                <NavItem href="/activities" icon="activity" label="Activities" active={window.location.pathname === '/activities'}/>
+                <NavItem href="/health" icon="trending-up" label="Health Stats" active={window.location.pathname === '/health'}/>
+              </nav>
+            )}
+          </div>
+
+          <div className="flex items-center space-x-5">
+            {isLoggedIn ? (
+              <>
+                <SyncStatus time={data.lastSynced} />
+                <DeviceStatus device={data.device} />
+                <UserAvatar letter={data.name[0]}/>
+                <button
+                  onClick={() => {
+                    localStorage.clear();
+                    window.location.href = '/login';
+                  }}
+                  className="flex items-center text-red-600 hover:text-red-800"
+                  style={{cursor: 'pointer'}}
+                >
+                  <i data-lucide="log-out" className="mr-2" style={{ width: '16px', height: '16px'}}></i>
+                  Logout
+                </button>
+              </>
+            ) : (
+              // Sinon un bouton pour se connecter
+              <NavLink to="/login" className="flex items-center text-blue-600 hover:text-blue-800" style={{cursor: 'pointer'}}>
+                <i data-lucide="log-in" className="mr-2" style={{ width: '16px', height: '16px' }}></i>
+                Login
+              </NavLink>
+            )}
+          </div>
+        </div>
+      </header>
     );
 };
 
