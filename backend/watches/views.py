@@ -82,11 +82,6 @@ class PassiveMeasureViewSet(ModelViewSet):
 class RefreshProfileView(APIView):
     permission_classes = [IsAuthenticated]
 
-    def _add_mesure(type_name, unite, activity, data):
-        measure_type, _ = MeasureType.objects.get_or_create(name=type_name, unite=unite)
-        Measure.objects.create(activity=activity, type=measure_type, value=data)
-
-
     def post(self, request, id_profile):
         try:
             profile = Profile.objects.get(id=id_profile)
@@ -125,14 +120,19 @@ class RefreshProfileView(APIView):
                     activity.type, _ = ActivityType.objects.get_or_create(name=activity_data["activityType"]["typeKey"])
                     activity.save()
   
+                    def _add_mesure(type_name, unite, key):
+                        if key in activity_data:
+                            measure_type, _ = MeasureType.objects.get_or_create(name=type_name, unite=unite)
+                            Measure.objects.create(activity=activity, type=measure_type, value=activity_data[key])
+
                     # Données spécifiques
                     if activity.type.name == 'running':
-                        self._add_mesure("Distance", "km", activity, activity_data["distance"])
-                        self._add_mesure("Nombre de pas", "pas", activity, activity_data["steps"])
-                        self._add_mesure("Dénivelé positif", "m", activity, activity_data["elevationGain"])
-                        self._add_mesure("Dénivelé négatif", "m", activity, activity_data["elevationLoss"])
-                        self._add_mesure("Vitesse moyenne", "km/h", activity, activity_data["maxSpeed"])
-                        self._add_mesure("Vitesse max", "km/h", activity, activity_data["averageSpeed"])
+                        _add_mesure("Distance", "km", "distance")
+                        _add_mesure("Nombre de pas", "pas", "steps")
+                        _add_mesure("Dénivelé positif", "m", "elevationGain")
+                        _add_mesure("Dénivelé négatif", "m", "elevationLoss")
+                        _add_mesure("Vitesse moyenne", "km/h", "maxSpeed")
+                        _add_mesure("Vitesse max", "km/h", "averageSpeed")
                         
                     elif activity.type.name == 'strength_training':
                         pass
