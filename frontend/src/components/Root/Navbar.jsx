@@ -6,15 +6,16 @@ import { createIcons, icons } from 'lucide';
 // import logo from '../../assets/logo.png';
 
 import { dashboardData } from '../../data/dashboardData';
+import useUserData from '../../hooks/useUserData';
 
 export default function Navbar() {
     let data = dashboardData;
 
     useEffect(() => {
         createIcons({ icons });
-    }, [])
+    }, []);
 
-    const isLoggedIn = localStorage.getItem('access_token');
+    const { userData, setUserDataIndex } = useUserData();
 
     return (
       <header className="bg-white shadow-sm sticky top-0 z-10 border-b border-gray-100">
@@ -26,22 +27,36 @@ export default function Navbar() {
             <NavLink to="/" className="text-2xl font-bold gradient-text mr-6">&nbsp;FitTrack</NavLink>
 
             
-            {isLoggedIn && (
+            {userData && (
               // On affiche le menu que si on est connecté
-              <nav className="hidden md:flex space-x-6">
+                <nav className="hidden md:flex space-x-6">
                 <NavItem href="/dashboard" icon="layout-dashboard" label="Dashboard" active={window.location.pathname === '/dashboard'}/>
                 <NavItem href="/activities" icon="activity" label="Activities" active={window.location.pathname === '/activities'}/>
                 <NavItem href="/health" icon="trending-up" label="Health Stats" active={window.location.pathname === '/health'}/>
-              </nav>
-            )}
-          </div>
+                </nav>
+              )}
+              </div>
 
-          <div className="flex items-center space-x-5">
-            {isLoggedIn ? (
-              <>
-                <SyncStatus time={data.lastSynced} />
-                <DeviceStatus device={data.device} />
-                <UserAvatar letter={data.name[0]}/>
+              <div className="flex items-center space-x-5">
+              {userData ? (
+                <>
+                <div className="flex items-center text-xs text-gray-600 bg-gray-50 rounded-full px-3 py-1.5">
+                  <div className="w-2 h-2 bg-green-500 rounded-full mr-2 pulse"></div>
+                  <span>Last synced: {userData.profiles && userData.profiles.length > 0 ? new Date(userData.profiles[0].last_update).toLocaleString() : 'Jamais'}</span>
+                </div>
+
+                <div className="bg-blue-50 text-blue-700 px-3 py-1.5 rounded-full text-xs font-medium flex items-center">
+                  <i data-lucide="watch" className="mr-1.5" style={{ width: '14px', height: '14px' }}></i>
+                  {userData.profiles && userData.profiles.length > 0 ? userData.profiles[0].brand : 'Aucune montre connectée'}
+                </div>
+                
+                <div className="relative">
+                  <div className="h-10 w-10 rounded-full bg-gradient-to-r from-blue-500 to-indigo-600 text-white flex items-center justify-center font-medium shadow-md">
+                  {userData.first_name[0]}
+                  </div>
+                  <div className="absolute bottom-0 right-0 w-3 h-3 bg-green-500 rounded-full border-2 border-white"></div>
+                </div>
+
                 <button
                   onClick={() => {
                     localStorage.clear();
@@ -72,27 +87,4 @@ const NavItem = ({ href, icon, label, active }) => (
     <i data-lucide={icon} className="mr-2" style={{ width: '16px', height: '16px' }}></i>
     {label}
   </NavLink>
-);
-
-const SyncStatus = ({ time }) => (
-  <div className="flex items-center text-xs text-gray-600 bg-gray-50 rounded-full px-3 py-1.5">
-    <div className="w-2 h-2 bg-green-500 rounded-full mr-2 pulse"></div>
-    <span>Last synced: {time}</span>
-  </div>
-);
-
-const DeviceStatus = ({ device }) => (
-  <div className="bg-blue-50 text-blue-700 px-3 py-1.5 rounded-full text-xs font-medium flex items-center">
-    <i data-lucide="watch" className="mr-1.5" style={{ width: '14px', height: '14px' }}></i>
-    {device}
-  </div>
-);
-
-const UserAvatar = ({ letter }) => (
-  <div className="relative">
-    <div className="h-10 w-10 rounded-full bg-gradient-to-r from-blue-500 to-indigo-600 text-white flex items-center justify-center font-medium shadow-md">
-      {letter}
-    </div>
-    <div className="absolute bottom-0 right-0 w-3 h-3 bg-green-500 rounded-full border-2 border-white"></div>
-  </div>
 );

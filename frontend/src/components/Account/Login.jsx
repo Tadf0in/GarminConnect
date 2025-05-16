@@ -41,6 +41,7 @@ export default function Login() {
             
             if (userRes.ok) {
                 localStorage.setItem("user_data", JSON.stringify(userData));
+                localStorage.setItem("user_data_index", 0);
                 window.location.href = "/dashboard";
             } else {
                 console.error("Impossible de récupérer les données de l'utilisateur");
