@@ -29,5 +29,6 @@ urlpatterns = [
     
     path('token/', TokenObtainPairView.as_view(), name='token_obtain_pair'),
     path('token/refresh/', TokenRefreshView.as_view(), name='token_refresh'),
+    path('refresh-profile/<int:id_profile>/', views.RefreshProfileView.as_view(), name='refresh_profile'),
     path('', include(router.urls))
 ]
