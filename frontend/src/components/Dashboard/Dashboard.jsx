@@ -1,14 +1,21 @@
+import { useEffect } from "react";
+import { createIcons, icons } from 'lucide';
+
 import BodyBatteryCard from './BodyBatteryCard';
 import CaloriesCard from './CaloriesCard';
 import HeartRateCard from './HeartRateCard';
+import IntensityMinutesCard from './IntensityMinutesCard';
 import SleepCard from './SleepCard';
 import StepsCard from './StepsCard';
 
 import { dashboardData } from '../../data/dashboardData';
-import IntensityMinutesCard from './IntensityMinutesCard';
 
 export default function Dashboard () {
     let data = dashboardData;
+
+    useEffect(() => {
+        createIcons({ icons });
+    }, [])
 
     return (
     <main class="max-w-6xl mx-auto px-4 py-6">

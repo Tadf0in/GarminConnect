@@ -3,10 +3,23 @@ from django.contrib.auth.password_validation import validate_password
 from rest_framework import serializers
 from .models import *
 
+
+class ProfileSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Profile
+        fields = '__all__'
+
+
 class UserSerializer(serializers.ModelSerializer):
+    profiles = serializers.SerializerMethodField()
+
     class Meta:
         model = User
-        fields = [field.name for field in User._meta.fields if field.name not in ('is_staff', 'is_superuser', 'is_active')]
+        fields = [field.name for field in User._meta.fields if field.name not in ('is_staff', 'is_superuser', 'is_active')] + ['profiles']
+
+    def get_profiles(self, obj):
+        profiles = Profile.objects.filter(user=obj)
+        return ProfileSerializer(profiles, many=True).data
 
     def create(self, validated_data):
         # Hash le mot de passe avant la création
@@ -18,12 +31,6 @@ class UserSerializer(serializers.ModelSerializer):
         if 'password' in validated_data:
             validated_data['password'] = make_password(validated_data['password'])
         return super().update(instance, validated_data)
-
-
-class ProfileSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = Profile
-        fields = '__all__'
 
 
 class ActivityTypeSerializer(serializers.ModelSerializer):
