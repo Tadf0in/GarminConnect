@@ -1,6 +1,5 @@
 import { useState } from "react";
 import { NavLink } from "react-router";
-import useFetch from "../../hooks/useFetch";
 
 export default function Login() {
     const [form, setForm] = useState({ email: "", password: "" });

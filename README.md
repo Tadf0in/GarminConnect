@@ -1,3 +1,5 @@
+## Backend :
+
 Créér l'environnement virtuel :
 ```bash
 py -m venv env
@@ -27,7 +29,27 @@ Lancer les migrations:
 py backend\manage.py migrate
 ```
 
-Lancer le serveur :
+Créer un super utilisateur (qui peut se connecter à /admin):
+```bash
+py backend\manage.py createsuperuser
+```
+
+Lancer le serveur python (pour l'API) :
 ```bash
 py backend\manage.py runserver
+```
+
+
+## Frontend :
+
+Installer les modules :
+```bash
+cd frontend
+npm install
+```
+
+Lancer le serveur react (pour le site) :
+```bash
+cd frontend
+npm run dev
 ```
