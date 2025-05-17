@@ -2,7 +2,9 @@ import { useEffect, useState } from "react"
 
 export default function useUserData() {
     const [userDataIndex, setUserDataIndex] = useState(localStorage.getItem('user_data_index'));
-    const [userData, setUserData] = useState(localStorage.getItem('user_data') ? JSON.parse(localStorage.getItem('user_data')).results[userDataIndex] : null);
+    let allUserData = localStorage.getItem('user_data');
+    const [userData, setUserData] = useState(allUserData ? JSON.parse(allUserData).results[userDataIndex] : null);
+    allUserData = JSON.parse(allUserData).results
 
     useEffect(() => {
         const userDataFromStorage = JSON.parse(localStorage.getItem('user_data'));
@@ -11,5 +13,5 @@ export default function useUserData() {
         }
     }, [userDataIndex]);
 
-    return { userData, setUserDataIndex };
+    return { allUserData, userData, setUserDataIndex };
   };

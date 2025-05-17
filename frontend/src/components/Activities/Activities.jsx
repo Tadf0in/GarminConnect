@@ -5,7 +5,7 @@ import useUserData from "../../hooks/useUserData";
 
 export default function Activities () {
     const {userData} = useUserData();
-    const {loading, data} = useFetch('/api/activity/?user=' + userData.id, {method: 'GET'});
+    const {loading, data} = useFetch('/api/activity/?user=' + userData.id, {method: 'GET'}, [userData.id]);
     
     return (<>
         {loading && <Loading />}

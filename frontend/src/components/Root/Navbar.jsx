@@ -1,21 +1,19 @@
 import '../../css/navbar.css';
 
 import { NavLink } from 'react-router';
-import { useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import { createIcons, icons } from 'lucide';
-// import logo from '../../assets/logo.png';
 
-import { dashboardData } from '../../data/dashboardData';
 import useUserData from '../../hooks/useUserData';
 
 export default function Navbar() {
-    let data = dashboardData;
+    const [profileMenuOpen, setProfileMenuOpen] = useState(false);
 
     useEffect(() => {
         createIcons({ icons });
     }, []);
 
-    const { userData, setUserDataIndex } = useUserData();
+    const { allUserData, userData, setUserDataIndex } = useUserData();
 
     return (
       <header className="bg-white shadow-sm sticky top-0 z-10 border-b border-gray-100">
@@ -51,10 +49,58 @@ export default function Navbar() {
                 </div>
                 
                 <div className="relative">
-                  <div className="h-10 w-10 rounded-full bg-gradient-to-r from-blue-500 to-indigo-600 text-white flex items-center justify-center font-medium shadow-md">
-                  {userData.first_name[0]}
-                  </div>
+                  <button
+                    onClick={() => setProfileMenuOpen(!profileMenuOpen)}
+                    className="h-10 w-10 rounded-full bg-gradient-to-r from-blue-500 to-indigo-600 text-white flex items-center justify-center font-medium shadow-md focus:outline-none"
+                  >
+                    {userData.first_name[0]}
+                  </button>
                   <div className="absolute bottom-0 right-0 w-3 h-3 bg-green-500 rounded-full border-2 border-white"></div>
+
+                  {profileMenuOpen && (
+                    <div className="absolute right-0 mt-2 w-64 bg-white border border-gray-200 rounded-md shadow-lg z-50">
+                      <ul className="divide-y divide-gray-100 max-h-64 overflow-y-auto">
+                        { allUserData  && allUserData.map((profile, index) => {
+                          const isActive = userData.id == profile.id;
+                          return <li
+                            key={index}
+                            onClick={() => {
+                              localStorage.setItem('user_data_index', index);
+                              setUserDataIndex(index);
+                              setProfileMenuOpen(false);
+                              window.location.replace('');
+                            }}
+                            className={`flex items-center px-4 py-2 cursor-pointer text-sm hover:bg-gray-100 ${
+                              isActive ? 'bg-blue-50 font-semibold text-blue-700' : ''
+                            }`}
+                          >
+                            {/* Avatar rond avec initiale */}
+                            <div
+                              className={`h-8 w-8 rounded-full flex items-center justify-center mr-3 font-medium text-white ${
+                                isActive ? 'bg-blue-600' : 'bg-gray-400'
+                              }`}
+                            >
+                              {profile.first_name[0]}
+                            </div>
+
+                            {/* Nom  */}
+                            <div className="flex-grow">
+                              {profile.first_name} {profile.last_name}
+                            </div>
+
+                            {/* Check si actif */}
+                            {isActive && (
+                              <i
+                                data-lucide="check"
+                                className="text-blue-600"
+                                style={{ width: '16px', height: '16px' }}
+                              ></i>
+                            )}
+                          </li>
+                        })}
+                      </ul>
+                    </div>
+                  )}
                 </div>
 
                 <button
