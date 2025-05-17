@@ -46,8 +46,16 @@ class ActivityViewSet(ModelViewSet):
 
     def get_queryset(self):
         if self.request.user.is_superuser or self.request.user.groups.filter(name='Enseignant').exists():
-            return Activity.objects.all()
-        return Activity.objects.filter(user=self.request.user)
+            queryset = Activity.objects.all()
+            
+            user_id = self.request.query_params.get('user')
+            if user_id:
+                queryset = queryset.filter(user_id=user_id)
+        
+        else:
+            queryset = Activity.objects.filter(user=self.request.user)
+
+        return queryset.order_by('-start')
 
 
 class MeasureTypeViewSet(ModelViewSet):

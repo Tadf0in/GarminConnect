@@ -16,7 +16,21 @@ export default function useFetch (url, options) {
                 ...(localStorage.getItem('access_token') && { 'Authorization': `Bearer ${localStorage.getItem('access_token')}` })
             }
 
-        }).then(res => res.json()).then(data => {
+        }).then(async res => {
+            // Si le token a expiré
+            if (res.status === 401) { 
+                return res.json().then(json => {
+                    if (json.code === 'token_not_valid') {
+                        alert('Veuillez vous reconnecter')
+                        localStorage.clear();
+                        window.location.href = '/login';
+                        return Promise.reject('Unauthorized');
+                    }
+                    return Promise.reject(json);
+                });
+            }
+            return res.json();
+        }).then(data => {
             setData(data)
         })
         .catch(err => {
