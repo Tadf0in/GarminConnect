@@ -13,7 +13,7 @@ export default function Navbar() {
         createIcons({ icons });
     }, []);
 
-    const { allUserData, userData, setUserDataIndex } = useUserData();
+    const { allUserData, userData, userDataIndex, setUserDataIndex } = useUserData();
 
     return (
       <header className="bg-white shadow-sm sticky top-0 z-10 border-b border-gray-100">
@@ -38,6 +38,30 @@ export default function Navbar() {
               <div className="flex items-center space-x-5">
               {userData ? (
                 <>
+                <button
+                  onClick={async () => {
+                    try {
+                      const response = await fetch('http://localhost:8000/api/refresh-profile/' + userData.profiles[0].id + '/', { 
+                        method: 'POST',
+                        headers: {
+                          Authorization: 'Bearer ' + localStorage.getItem('access_token')
+                        }
+                      });
+                      if (response.ok) {
+                        window.location.reload();
+                      } else {
+                        console.error('Failed to refresh profile');
+                      }
+                    } catch (error) {
+                      console.error('Error refreshing profile:', error);
+                    }
+                  }}
+                  className="flex items-center text-blue-600 hover:text-blue-800"
+                  style={{ cursor: 'pointer' }}
+                >
+                  <i data-lucide="refresh-cw" className="mr-2" style={{ width: '16px', height: '16px' }}></i>
+                </button>
+
                 <div className="flex items-center text-xs text-gray-600 bg-gray-50 rounded-full px-3 py-1.5">
                   <div className="w-2 h-2 bg-green-500 rounded-full mr-2 pulse"></div>
                   <span>Last synced: {userData.profiles && userData.profiles.length > 0 ? new Date(userData.profiles[0].last_update).toLocaleString() : 'Jamais'}</span>

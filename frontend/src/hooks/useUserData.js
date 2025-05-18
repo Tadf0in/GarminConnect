@@ -14,5 +14,5 @@ export default function useUserData() {
         }
     }, [userDataIndex]);
 
-    return { allUserData, userData, setUserDataIndex };
+    return { allUserData, userData, userDataIndex,setUserDataIndex };
   };
